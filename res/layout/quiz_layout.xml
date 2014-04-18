@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:text="Word Here"
+        android:textSize="30sp" />
+
+    <RadioGroup
+        android:id="@+id/rgDefinitionChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvWord"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp" >
+
+        <RadioButton
+            android:id="@+id/rDefinition0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="RadioButton1" />
+
+        <RadioButton
+            android:id="@+id/rDefinition1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton2" />
+
+        <RadioButton
+            android:id="@+id/rDefinition2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton3" />
+
+        <RadioButton
+            android:id="@+id/rDefinition3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton3" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rgDefinitionChoice"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:weightSum="120" >
+
+        <Button
+            android:id="@+id/bSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:onClick="skipWord"
+            android:text="Skip!" />
+
+        <Button
+            android:id="@+id/bAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:onClick="answerQuestion"
+            android:text="Answer!" />
+
+        <Button
+            android:id="@+id/bNextQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:onClick="nextQuestion"
+            android:text="Next" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCorrectTallyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:text="Correct Answers:" />
+
+    <TextView
+        android:id="@+id/tvWrongAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCorrectTallyLabel"
+        android:layout_centerHorizontal="true"
+        android:text="Wrong Answers" />
+
+    <TextView
+        android:id="@+id/tvSkippedAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/tvWrongAnswers"
+        android:text="Skipped Answers" />
+
+</RelativeLayout>

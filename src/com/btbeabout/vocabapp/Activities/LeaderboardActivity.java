@@ -1,0 +1,165 @@
+package com.btbeabout.vocabapp.Activities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.Toast;
+
+import com.btbeabout.vocabapp.R;
+import com.btbeabout.vocabapp.Connectivity.ConnectionChecker;
+import com.btbeabout.vocabapp.ParseConnector.LeaderboardParseArrayAdapter;
+import com.btbeabout.vocabapp.ParseConnector.ParseManager;
+import com.btbeabout.vocabapp.ParseConnector.ProgressIndicator;
+import com.btbeabout.vocabapp.SharedPrefs.SharedPrefsManager;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+public class LeaderboardActivity extends Activity implements OnClickListener,
+		OnMenuItemClickListener {
+
+	LeaderboardParseArrayAdapter mAdapter;
+	SharedPrefsManager mPrefsManager;
+	Button criteriaMenuOpener;
+	PopupMenu popup;
+	ListView leaderboardListView;
+	ParseManager parse;
+	ProgressIndicator downloadProgress;
+	ConnectionChecker conCheck;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.leaderboard_layout);
+
+		mPrefsManager = new SharedPrefsManager(this);
+		parse = new ParseManager(retrieveUserName(), this);
+
+		leaderboardListView = (ListView) findViewById(R.id.leaderboardListView);
+
+		/*
+		 *  Creates menu which allows user to sort leaderboard by various criteria, detailed below:
+		 *  Questions answered, questions skipped, correct, incorrect, etc.
+		 *  
+		 *  On each load, a dialog box is inflated to show the user that information is being downloaded from Parse.
+		 *  If no connection is available, prompts user with a toast to try again later when a connection is established.
+		 */
+		
+		criteriaMenuOpener = (Button) findViewById(R.id.button3);
+		criteriaMenuOpener.setOnClickListener(this);
+		popup = new PopupMenu(this, criteriaMenuOpener);
+		MenuInflater inflater1 = popup.getMenuInflater();
+		inflater1.inflate(R.menu.sorting_menu, popup.getMenu());
+		popup.setOnMenuItemClickListener(this);
+
+		
+		updateList("totalCorrectAnswersAmount");
+	}
+
+	public void setAdapter(String questionDataQuery) {
+		mAdapter = new LeaderboardParseArrayAdapter(this,
+				new ArrayList<ParseObject>(), questionDataQuery);
+		leaderboardListView.setAdapter(mAdapter);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button3:
+			popup.show();
+		}
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.criteriaSortCorrectAnswers:
+			updateList("totalCorrectAnswersAmount");
+			criteriaMenuOpener.setText("Sort By: Correct Answers");
+			return true;
+		case R.id.criteriaSortInorrectAnswers:
+			updateList("totalIncorrectAnswersAmount");
+			criteriaMenuOpener.setText("Sort By: Incorrect Answers");
+			return true;
+		case R.id.criteriaSortSkippedQuestions:
+			updateList("totalSkippedQuestionsAmount");
+			criteriaMenuOpener.setText("Sort By: Skipped Questions");
+			return true;
+		case R.id.criteriaSortTotalQuestions:
+			updateList("totalQuestionsAmount");
+			criteriaMenuOpener.setText("Sort By: Total Questions");
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public void updateData(String questionDataQuery) {
+		downloadProgress = new ProgressIndicator(this);
+		downloadProgress.showProgressRing();
+		ParseQuery<ParseObject> query = ParseQuery
+				.getQuery("QuestionsMetaData");
+		query.setLimit(5);
+		query.orderByDescending(questionDataQuery);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					for (ParseObject obj : objects) {
+						mAdapter.add(obj);
+					}
+					downloadProgress.cancelProgressRing();
+
+				} else {
+					System.out
+							.println("Whoops! Exception in Quiz History Updating!");
+				}
+			}
+
+		});
+	}
+
+	public void updateList(String criteria) {
+		conCheck = new ConnectionChecker(this);
+		if (conCheck.isConnected()) {
+			setAdapter(criteria);
+			updateData(criteria);
+		} else {
+			Toast.makeText(this, "Error retrieving quiz data. Check your internet connection.", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public String retrieveUserName() {
+		String userName = mPrefsManager.getUsername();
+		System.out.println("PrefsManager: " + userName);
+		return userName;
+	}
+
+	public void startNewQuiz(View v) {
+
+		Intent i = new Intent(this, QuizScreenActivity.class);
+		i.putExtra("quizSize", 20);
+		startActivity(i);
+		finish();
+
+	}
+
+	public void goToMainMenu(View v) {
+		Intent i = new Intent(this, MainActivity.class);
+		startActivity(i);
+		finish();
+	}
+
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/criteriaSortCorrectAnswers"
+          android:title="Correct Answers"
+          android:showAsAction="always" />
+    <item android:id="@+id/criteriaSortInorrectAnswers"
+          android:title="Incorrect Answers"
+          android:showAsAction="always" />
+    <item android:id="@+id/criteriaSortSkippedQuestions"
+          android:title="Skipped Questions"
+          android:showAsAction="always" />
+    <item android:id="@+id/criteriaSortTotalQuestions"
+          android:title="Total Questions"
+          android:showAsAction="always" />                 
+</menu>
