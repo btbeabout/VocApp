@@ -26,22 +26,22 @@ public class QuizScreenActivity extends Activity {
 	TextView tvCorrectTally;
 	TextView tvWrongAnswers;
 	TextView tvSkippedAnswers;
-	RadioButton rDefinition0;
-	RadioButton rDefinition1;
-	RadioButton rDefinition2;
-	RadioButton rDefinition3;
+	RadioButton rbDefinition0;
+	RadioButton rbDefinition1;
+	RadioButton rbDefinition2;
+	RadioButton rbDefinition3;
 	RadioButton rbAnswerAnimation;
-	RadioButton correctChoice;
+	RadioButton rbCorrectChoice;
 	RadioGroup rgDefinitionChoice;
 	Button bAnswer;
 	Button bSkip;
-	QuizBehavior quizBehavior;
-	String[] wordArray;
-	String[] definitionArray;
-	int quizSize = 0;
-	int currentWordInt = 0;
-	int randomDefinitionInt = 0;
-	int correctRadioButton;
+	QuizBehavior mQuizBehavior;
+	String[] mWordArray;
+	String[] mDefinitionArray;
+	int mQuizSize = 0;
+	int mCurrentWordInt = 0;
+	int mRandomDefinitionInt = 0;
+	int mCorrectRadioButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +49,14 @@ public class QuizScreenActivity extends Activity {
 		setContentView(R.layout.quiz_layout);
 
 		Intent intent = getIntent();
-		quizSize = intent.getIntExtra("quizSize", 20);
+		mQuizSize = intent.getIntExtra("mQuizSize", 20);
 
 		initializeClasses();
 		initializeViews();
 		setQuiz();
 		
 		/*
-		 *  Integrates with quizBehavior class to a) create a new quiz, b) control flow of the quiz, c) allower user to interact with
+		 *  Integrates with mQuizBehavior class to a) create a new quiz, b) control flow of the quiz, c) allower user to interact with
 		 *  quiz through views, and d) save the quiz to Parse.
 		 *  
 		 *  Plans for the future: avoid issue where tilting screen resets progress. May do this by locking into portrait mode, or, preferably,
@@ -67,7 +67,7 @@ public class QuizScreenActivity extends Activity {
 	}
 
 	public void initializeClasses() {
-		quizBehavior = new QuizBehavior(this, quizSize);
+		mQuizBehavior = new QuizBehavior(this, mQuizSize);
 	}
 
 	public void initializeViews() {
@@ -76,10 +76,10 @@ public class QuizScreenActivity extends Activity {
 		tvWrongAnswers = (TextView) findViewById(R.id.tvWrongAnswers);
 		tvSkippedAnswers = (TextView) findViewById(R.id.tvSkippedAnswers);
 
-		rDefinition0 = (RadioButton) findViewById(R.id.rDefinition0);
-		rDefinition1 = (RadioButton) findViewById(R.id.rDefinition1);
-		rDefinition2 = (RadioButton) findViewById(R.id.rDefinition2);
-		rDefinition3 = (RadioButton) findViewById(R.id.rDefinition3);
+		rbDefinition0 = (RadioButton) findViewById(R.id.rDefinition0);
+		rbDefinition1 = (RadioButton) findViewById(R.id.rDefinition1);
+		rbDefinition2 = (RadioButton) findViewById(R.id.rDefinition2);
+		rbDefinition3 = (RadioButton) findViewById(R.id.rDefinition3);
 		rgDefinitionChoice = (RadioGroup) findViewById(R.id.rgDefinitionChoice);
 		bAnswer = (Button) findViewById(R.id.bAnswer);
 		bSkip = (Button) findViewById(R.id.bSkip);
@@ -87,7 +87,7 @@ public class QuizScreenActivity extends Activity {
 
 	public void setQuiz() {
 		rgDefinitionChoice.clearCheck();
-		quizBehavior.setQuiz();
+		mQuizBehavior.setQuiz();
 		setCurrentWord();
 		setRadioButtons();
 		setCorrectRadioButton();
@@ -95,29 +95,29 @@ public class QuizScreenActivity extends Activity {
 	}
 
 	public void setCurrentWord() {
-		tvWord.setText(quizBehavior.getCurrentWord());
+		tvWord.setText(mQuizBehavior.getCurrentWord());
 	}
 
 	public void setRadioButtons() {
-		rDefinition0.setText(quizBehavior.getRadioZero());
-		rDefinition1.setText(quizBehavior.getRadioOne());
-		rDefinition2.setText(quizBehavior.getRadioTwo());
-		rDefinition3.setText(quizBehavior.getRadioThree());
+		rbDefinition0.setText(mQuizBehavior.getRadioZero());
+		rbDefinition1.setText(mQuizBehavior.getRadioOne());
+		rbDefinition2.setText(mQuizBehavior.getRadioTwo());
+		rbDefinition3.setText(mQuizBehavior.getRadioThree());
 	}
 
 	public void setCorrectRadioButton() {
-		switch (quizBehavior.getCorrectRadioButton()) {
+		switch (mQuizBehavior.getCorrectRadioButton()) {
 		case 0:
-			correctChoice = (RadioButton) findViewById(R.id.rDefinition0);
+			rbCorrectChoice = (RadioButton) findViewById(R.id.rDefinition0);
 			break;
 		case 1:
-			correctChoice = (RadioButton) findViewById(R.id.rDefinition1);
+			rbCorrectChoice = (RadioButton) findViewById(R.id.rDefinition1);
 			break;
 		case 2:
-			correctChoice = (RadioButton) findViewById(R.id.rDefinition2);
+			rbCorrectChoice = (RadioButton) findViewById(R.id.rDefinition2);
 			break;
 		case 3:
-			correctChoice = (RadioButton) findViewById(R.id.rDefinition3);
+			rbCorrectChoice = (RadioButton) findViewById(R.id.rDefinition3);
 			break;
 		default:
 			break;
@@ -131,15 +131,15 @@ public class QuizScreenActivity extends Activity {
 	
 	public void nextQuestion(View v) {
 
-		if (quizBehavior.getQuestionAnswered()) {
-			if (quizBehavior.getCurrentPlaceInWordList() < quizBehavior
+		if (mQuizBehavior.getQuestionAnswered()) {
+			if (mQuizBehavior.getCurrentPlaceInWordList() < mQuizBehavior
 					.getQuizSize() - 1) {
-				quizBehavior.incrementCurrentPlaceInWordList();
-				quizBehavior.setQuestionAnswered(false);
+				mQuizBehavior.incrementCurrentPlaceInWordList();
+				mQuizBehavior.setQuestionAnswered(false);
 				setQuiz();
 			} else {
 				Toast.makeText(this, "Quiz Over!", Toast.LENGTH_SHORT).show();
-				quizBehavior.setQuizDate();
+				mQuizBehavior.setQuizDate();
 				quizOver();
 				finish();
 
@@ -156,11 +156,11 @@ public class QuizScreenActivity extends Activity {
 	public void quizOver() {
 		saveQuizToParse();
 		Intent i = new Intent(this, QuizResultsActivity.class);
-		i.putExtra("correctAnswers", quizBehavior.getCorrectTally());
-		i.putExtra("incorrectAnswers", quizBehavior.getIncorrectTally());
-		i.putExtra("skippedAnswers", quizBehavior.getSkipTally());
-		i.putExtra("wordList", quizBehavior.getWordList());
-		i.putExtra("definitionList", quizBehavior.getDefinitionList());
+		i.putExtra("correctAnswers", mQuizBehavior.getCorrectTally());
+		i.putExtra("incorrectAnswers", mQuizBehavior.getIncorrectTally());
+		i.putExtra("skippedAnswers", mQuizBehavior.getSkipTally());
+		i.putExtra("wordList", mQuizBehavior.getWordList());
+		i.putExtra("definitionList", mQuizBehavior.getDefinitionList());
 		startActivity(i);
 	}
 
@@ -171,16 +171,16 @@ public class QuizScreenActivity extends Activity {
 		try {
 			if (checkResponse()) {
 				answerAnimation(0xFF458B00);
-				if (!quizBehavior.getQuestionAnswered()) {
-					quizBehavior.setCorrectResponse();
+				if (!mQuizBehavior.getQuestionAnswered()) {
+					mQuizBehavior.setCorrectResponse();
 					incrementCorrectTally();
-					quizBehavior.setQuestionAnswered(true);
+					mQuizBehavior.setQuestionAnswered(true);
 				}
 			} else {
 				answerAnimation(0xFFFF3333);
-				if (!quizBehavior.getQuestionAnswered()) {
-					quizBehavior.setIncorrectResponse();
-					quizBehavior.setQuestionAnswered(true);
+				if (!mQuizBehavior.getQuestionAnswered()) {
+					mQuizBehavior.setIncorrectResponse();
+					mQuizBehavior.setQuestionAnswered(true);
 					incrementWrongTally();
 				}
 			}
@@ -212,35 +212,35 @@ public class QuizScreenActivity extends Activity {
 	// Increments quiz data.
 
 	public void incrementCorrectTally() {
-		tvCorrectTally.setText("Correct: " + quizBehavior.getCorrectTally()
-				+ "/" + quizBehavior.getQuizSize());
+		tvCorrectTally.setText("Correct: " + mQuizBehavior.getCorrectTally()
+				+ "/" + mQuizBehavior.getQuizSize());
 	}
 
 	public void incrementWrongTally() {
-		tvWrongAnswers.setText("Incorrect: " + quizBehavior.getIncorrectTally()
-				+ "/" + quizBehavior.getQuizSize());
+		tvWrongAnswers.setText("Incorrect: " + mQuizBehavior.getIncorrectTally()
+				+ "/" + mQuizBehavior.getQuizSize());
 	}
 
 	public void incrementSkippedTally() {
-		tvSkippedAnswers.setText("Skipped: " + quizBehavior.getSkipTally()
-				+ "/" + quizBehavior.getQuizSize());
+		tvSkippedAnswers.setText("Skipped: " + mQuizBehavior.getSkipTally()
+				+ "/" + mQuizBehavior.getQuizSize());
 	}
 
 	// Essentially same function as nextQuestion(), but doesn't requires that user has NOT answered the question prior to skipping.
 	
 	public void skipWord(View v) {
-		if (!quizBehavior.getQuestionAnswered()) {
-			if (quizBehavior.getCurrentPlaceInWordList() < quizBehavior
+		if (!mQuizBehavior.getQuestionAnswered()) {
+			if (mQuizBehavior.getCurrentPlaceInWordList() < mQuizBehavior
 					.getQuizSize() - 1) {
-				quizBehavior.setIncrementSkips();
-				quizBehavior.incrementCurrentPlaceInWordList();
+				mQuizBehavior.setIncrementSkips();
+				mQuizBehavior.incrementCurrentPlaceInWordList();
 				incrementSkippedTally();
-				quizBehavior.setQuestionAnswered(false);
+				mQuizBehavior.setQuestionAnswered(false);
 				setQuiz();
 			} else {
 				Toast.makeText(this, "Quiz Over!", Toast.LENGTH_LONG).show();
-				quizBehavior.setQuizDate();
-				quizBehavior.setIncrementSkips();
+				mQuizBehavior.setQuizDate();
+				mQuizBehavior.setIncrementSkips();
 				quizOver();
 				finish();
 			}
@@ -249,13 +249,13 @@ public class QuizScreenActivity extends Activity {
 	}
 	
 	public void saveQuizToParse() {
-		quizBehavior.saveQuestionsMetaData();
-		quizBehavior.saveQuizToParse();
+		mQuizBehavior.saveQuestionsMetaData();
+		mQuizBehavior.saveQuizToParse();
 	}
 
 	public boolean checkResponse() {
 
-		if (rgDefinitionChoice.getCheckedRadioButtonId() == correctChoice
+		if (rgDefinitionChoice.getCheckedRadioButtonId() == rbCorrectChoice
 				.getId()) {
 			return true;
 		} else {

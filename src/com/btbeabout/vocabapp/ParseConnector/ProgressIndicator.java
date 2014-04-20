@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 public class ProgressIndicator {
 
 	private Context mContext;
-	ProgressDialog downloadRingDialog;
+	ProgressDialog mDownloadRingDialog;
 
 	// This allows user to see that information is being downloaded from Parse
 	// since, otherwise, would just result in a temporarily empty listview.
@@ -17,15 +17,15 @@ public class ProgressIndicator {
 	}
 
 	public void showProgressRing() {
-		downloadRingDialog = new ProgressDialog(mContext);
-		downloadRingDialog.setMessage("Downloading quiz data...");
-		downloadRingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		downloadRingDialog.setIndeterminate(true);
-		downloadRingDialog.show();
+		mDownloadRingDialog = new ProgressDialog(mContext);
+		mDownloadRingDialog.setMessage("Downloading quiz data...");
+		mDownloadRingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mDownloadRingDialog.setIndeterminate(true);
+		mDownloadRingDialog.show();
 	}
 
 	public void cancelProgressRing() {
-		downloadRingDialog.cancel();
+		mDownloadRingDialog.cancel();
 	}
 
 }

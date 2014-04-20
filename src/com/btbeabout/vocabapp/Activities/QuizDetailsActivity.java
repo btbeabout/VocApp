@@ -18,19 +18,19 @@ public class QuizDetailsActivity extends Activity {
 	
 	ListView results_word_list;
 	
-	ArrayAdapter<String> word_list_adapter;
+	ArrayAdapter<String> mWordListAdapter;
 
-	int correctAnswers;
-	int incorrectAnswers;
-	int skippedAnswers;
+	int mCorrectAnswers;
+	int mIncorrectAnswers;
+	int mSkippedAnswers;
 	
-	String[] wordsArray;
-	String[] definitionsArray;
-	String[] combinedList;
+	String[] mWordsArray;
+	String[] mDefinitionsArray;
+	String[] mCombinedList;
 	
-	String currentDate;
-	String words;
-	String definitions;
+	String mCurrentDate;
+	String mWords;
+	String mDefinitions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +47,28 @@ public class QuizDetailsActivity extends Activity {
 	// Pairs each words with its correct definitions to form one String each for the listview.
 	
 	public String[] combineWordsAndDefinitions(String words, String definitions) {
-		wordsArray = words.split(",");
-		definitionsArray = definitions.split(",");
+		mWordsArray = words.split(",");
+		mDefinitionsArray = definitions.split(",");
 		
-		combinedList = new String[wordsArray.length];
-		for (int i = 0; i < wordsArray.length; i++) {
-			combinedList[i] = wordsArray[i] + " = " + definitionsArray[i];
+		mCombinedList = new String[mWordsArray.length];
+		for (int i = 0; i < mWordsArray.length; i++) {
+			mCombinedList[i] = mWordsArray[i] + " = " + mDefinitionsArray[i];
 		}
 		
-		return combinedList;
+		return mCombinedList;
 		
 	}
 	
 	public void setupArrayAdapter() {
-		word_list_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, combineWordsAndDefinitions(words, definitions));
-		results_word_list.setAdapter(word_list_adapter);
+		mWordListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, combineWordsAndDefinitions(mWords, mDefinitions));
+		results_word_list.setAdapter(mWordListAdapter);
 	}
 	
 	public void updateViews() {
-		tvQuizDate.setText(currentDate);
-		tvCorrectAnswers.setText(Integer.toString(correctAnswers));
-		tvIncorrectAnswers.setText(Integer.toString(incorrectAnswers));
-		tvSkippedAnswers.setText(Integer.toString(skippedAnswers));
+		tvQuizDate.setText(mCurrentDate);
+		tvCorrectAnswers.setText(Integer.toString(mCorrectAnswers));
+		tvIncorrectAnswers.setText(Integer.toString(mIncorrectAnswers));
+		tvSkippedAnswers.setText(Integer.toString(mSkippedAnswers));
 	}
 	
 	public void initializeViews() {
@@ -85,12 +85,12 @@ public class QuizDetailsActivity extends Activity {
 	
 	public void receiveIntent() {
 		Intent intent = getIntent();
-		currentDate = intent.getStringExtra("quizDate");
-		correctAnswers = intent.getIntExtra("correctAnswers", 1);
-		incorrectAnswers = intent.getIntExtra("incorrectAnswers", 2);
-		skippedAnswers = intent.getIntExtra("skippedAnswers", 3);
-		words = intent.getStringExtra("wordList");
-		definitions = intent.getStringExtra("definitionList");
+		mCurrentDate = intent.getStringExtra("quizDate");
+		mCorrectAnswers = intent.getIntExtra("correctAnswers", 1);
+		mIncorrectAnswers = intent.getIntExtra("incorrectAnswers", 2);
+		mSkippedAnswers = intent.getIntExtra("skippedAnswers", 3);
+		mWords = intent.getStringExtra("wordList");
+		mDefinitions = intent.getStringExtra("definitionList");
 		
 	}
 

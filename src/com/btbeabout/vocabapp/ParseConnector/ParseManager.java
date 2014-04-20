@@ -23,8 +23,8 @@ public class ParseManager extends Application {
 	 * However, retrieving and viewing data is done via arraylist adapters.
 	 */
 
-	ConnectionChecker conCheck;
-	String playerName;
+	ConnectionChecker mConCheck;
+	String mPlayerName;
 	List<Integer> mQuestionsMetaDataList;
 
 	public ParseManager(String playerName, Context context) {
@@ -33,8 +33,8 @@ public class ParseManager extends Application {
 				"6lzvfC38Tqm7PilACMICn8MykoES3RVHPTqh0aGQ");
 
 		ParseUser.enableAutomaticUser();
-		conCheck = new ConnectionChecker(context);
-		this.playerName = playerName;
+		mConCheck = new ConnectionChecker(context);
+		this.mPlayerName = playerName;
 	}
 
 	public void saveQuiz(QuizObject quiz) {
@@ -45,7 +45,7 @@ public class ParseManager extends Application {
 		String convertedQuizObject = gson.toJson(quiz);
 
 		ParseObject quizWithUserObject = new ParseObject("savedQuiz");
-		quizWithUserObject.put("playerName", playerName);
+		quizWithUserObject.put("playerName", mPlayerName);
 		quizWithUserObject.put("quizObject", convertedQuizObject);
 		saveObject(quizWithUserObject);
 	}
@@ -56,7 +56,7 @@ public class ParseManager extends Application {
 			final int totalCorrectAnswers, final int totalIncorrectAnswers,
 			final int TotalSkippedQuestions) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("QuestionsMetaData");
-		query.whereEqualTo("playerName", playerName);
+		query.whereEqualTo("playerName", mPlayerName);
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
@@ -100,7 +100,7 @@ public class ParseManager extends Application {
 			int totalCorrectAnswers, int totalIncorrectAnswers,
 			int totalSkippedQuestions, String parseObjectName) {
 		ParseObject newQuestionsDataObject = new ParseObject(parseObjectName);
-		newQuestionsDataObject.put("playerName", playerName);
+		newQuestionsDataObject.put("playerName", mPlayerName);
 		newQuestionsDataObject.put("totalQuestionsAmount", totalQuestions);
 		newQuestionsDataObject.put("totalCorrectAnswersAmount", totalCorrectAnswers);
 		newQuestionsDataObject.put("totalIncorrectAnswersAmount", totalIncorrectAnswers);
@@ -110,7 +110,7 @@ public class ParseManager extends Application {
 	}
 
 	public void saveObject(ParseObject object) {
-		if (conCheck.isConnected()) {
+		if (mConCheck.isConnected()) {
 			object.saveInBackground();
 		} else {
 			object.saveEventually();

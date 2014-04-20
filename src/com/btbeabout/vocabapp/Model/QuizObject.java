@@ -6,27 +6,27 @@ import java.util.Set;
 
 public class QuizObject {
 
-	int quizSize;
-	int correctResponses = 0;
-	int incorrectResponses = 0;
-	int skippedWords = 0;
-	String quizDate;
-	Set<Integer> wordSet = new HashSet<Integer>();
-	Set<Integer> definitionSet;
-	String[] words;
-	String[] definitions;
+	int mQuizSize;
+	int mCorrectResponses = 0;
+	int mIncorrectResponses = 0;
+	int mSkippedWords = 0;
+	String mQuizDate;
+	Set<Integer> mWordSet = new HashSet<Integer>();
+	Set<Integer> mDefinitionSet;
+	String[] mWords;
+	String[] mDefinitions;
 
-	public QuizObject(int quizSize, String[] inputWords, String[] inputDefinitions) {
-		this.quizSize = quizSize;
-		words = new String[quizSize];
-		definitions = new String[quizSize];
+	public QuizObject(int mQuizSize, String[] inputWords, String[] inputDefinitions) {
+		this.mQuizSize = mQuizSize;
+		mWords = new String[mQuizSize];
+		mDefinitions = new String[mQuizSize];
 
-		while (wordSet.size() < quizSize) {
+		while (mWordSet.size() < mQuizSize) {
 			Random randomNum = new Random();
 			// Chooses unique, current word
 			int curWord = randomNum.nextInt(inputWords.length);
-			if (!wordSet.contains(curWord)) {
-				wordSet.add(curWord);
+			if (!mWordSet.contains(curWord)) {
+				mWordSet.add(curWord);
 				System.out.println("ADDING");
 			}
 
@@ -34,55 +34,55 @@ public class QuizObject {
 		// one-to-one transfer from set to words array
 		int wordPlace = 0;
 
-		for (int i : wordSet) {
-			words[wordPlace] = inputWords[i];
-			definitions[wordPlace] = inputDefinitions[i];
+		for (int i : mWordSet) {
+			mWords[wordPlace] = inputWords[i];
+			mDefinitions[wordPlace] = inputDefinitions[i];
 			wordPlace++;
 		}
 	}
 
 	public String[] getWords() {
-		return words;
+		return mWords;
 	}
 
 	public String[] getDefinitions() {
-		return definitions;
+		return mDefinitions;
 	}
 
 	public int getQuizSize() {
-		return quizSize;
+		return mQuizSize;
 	}
 
 	public int getCorrectResponses() {
-		return correctResponses;
+		return mCorrectResponses;
 	}
 
 	public void incrementCorrectResponse() {
-		this.correctResponses = correctResponses + 1;
+		this.mCorrectResponses = mCorrectResponses + 1;
 	}
 
 	public int getIncorrectResponses() {
-		return incorrectResponses;
+		return mIncorrectResponses;
 	}
 
 	public void incrementIncorrectResponse() {
-		this.incorrectResponses = incorrectResponses + 1;
+		this.mIncorrectResponses = mIncorrectResponses + 1;
 	}
 
 	public int getSkippedWords() {
-		return skippedWords;
+		return mSkippedWords;
 	}
 
 	public void incrementSkippedWords() {
-		this.skippedWords = skippedWords + 1;
+		this.mSkippedWords = mSkippedWords + 1;
 	}
 	
 	public void setQuizDate(String dateQuizFinished) {
-		this.quizDate = dateQuizFinished;  
+		this.mQuizDate = dateQuizFinished;  
 	}
 	
 	public String getQuizDate() {
-		return quizDate;
+		return mQuizDate;
 	}
 
 }

@@ -15,7 +15,7 @@ import com.btbeabout.vocabapp.R;
 public class SharedPrefsManager {
 
 	Context mContext;
-	SharedPreferences nameSettings;
+	SharedPreferences mNameSettings;
 
 	public static final String PREFS_NAME = "VocAppPrefsFile";
 
@@ -33,11 +33,11 @@ public class SharedPrefsManager {
 
 	public SharedPrefsManager(Context context) {
 		mContext = context;
-		nameSettings = mContext.getSharedPreferences(PREFS_NAME, 0);
+		mNameSettings = mContext.getSharedPreferences(PREFS_NAME, 0);
 	}
 
 	public void loadPrefsOnAppOpen() {
-		boolean firstRun = nameSettings.getBoolean("firstRun", true);
+		boolean firstRun = mNameSettings.getBoolean("firstRun", true);
 
 		if (firstRun) {
 			firstRunWelcome();
@@ -67,16 +67,16 @@ public class SharedPrefsManager {
 	}
 
 	public void returnGreetingToast(Context context) {
-		String userName = nameSettings.getString("userName", "no name entered");
+		String userName = mNameSettings.getString("userName", "no name entered");
 		Toast.makeText(context, "Welcome, " + userName, Toast.LENGTH_SHORT)
 				.show();
 	}
 
 	public String getUsername() {
 		System.out.println("RETRIEVING USERNAME...");
-		System.out.println(nameSettings
+		System.out.println(mNameSettings
 				.getString("userName", "no name entered"));
-		return nameSettings.getString("userName", "no name entered");
+		return mNameSettings.getString("userName", "no name entered");
 	}
 
 	public void nameChoosingDialog(Context context) {
@@ -103,7 +103,7 @@ public class SharedPrefsManager {
 					toastThankYou(mContext);
 					String userName = edit.getText().toString();
 
-					SharedPreferences.Editor nameSettingsEditor = nameSettings
+					SharedPreferences.Editor nameSettingsEditor = mNameSettings
 							.edit();
 					nameSettingsEditor.putString("userName", userName);
 					nameSettingsEditor.putBoolean("firstRun", false);

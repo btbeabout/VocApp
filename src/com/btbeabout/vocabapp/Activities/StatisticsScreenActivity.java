@@ -25,11 +25,11 @@ import com.parse.ParseQuery;
 
 public class StatisticsScreenActivity extends Activity {
 
-	ParseManager parse;
+	ParseManager mParse;
 	QuestionsStatisticsParseArrayAdapter mAdapter;
 	SharedPrefsManager mPrefsManager;
-	ProgressIndicator downloadProgress;
-	ConnectionChecker conCheck;
+	ProgressIndicator mDownloadProgress;
+	ConnectionChecker mConCheck;
 	ListView quizDataListView;
 
 	@Override
@@ -38,7 +38,7 @@ public class StatisticsScreenActivity extends Activity {
 		setContentView(R.layout.statistics_layout);
 
 		mPrefsManager = new SharedPrefsManager(this);
-		parse = new ParseManager(retrieveUserName(), this);
+		mParse = new ParseManager(retrieveUserName(), this);
 
 		quizDataListView = (ListView) findViewById(R.id.quizStatisticsListView);
 
@@ -58,8 +58,8 @@ public class StatisticsScreenActivity extends Activity {
 	}
 
 	public void updateData() {
-		downloadProgress = new ProgressIndicator(this);
-		downloadProgress.showProgressRing();
+		mDownloadProgress = new ProgressIndicator(this);
+		mDownloadProgress.showProgressRing();
 		ParseQuery<ParseObject> query = ParseQuery
 				.getQuery("QuestionsMetaData");
 		query.whereEqualTo("playerName", retrieveUserName());
@@ -70,7 +70,7 @@ public class StatisticsScreenActivity extends Activity {
 					System.out.println("Pulling questionsmetadata...");
 
 					mAdapter.add(objects.get(0));
-					downloadProgress.cancelProgressRing();
+					mDownloadProgress.cancelProgressRing();
 
 				} else {
 					System.out
@@ -82,8 +82,8 @@ public class StatisticsScreenActivity extends Activity {
 	}
 
 	public void updateList() {
-		conCheck = new ConnectionChecker(this);
-		if (conCheck.isConnected()) {
+		mConCheck = new ConnectionChecker(this);
+		if (mConCheck.isConnected()) {
 			quizDataListView.setAdapter(mAdapter);
 			updateData();
 		} else {

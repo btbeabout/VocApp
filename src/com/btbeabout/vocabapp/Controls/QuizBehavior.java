@@ -18,38 +18,35 @@ public class QuizBehavior {
 
 	QuizObject newQuiz;
 
-	Context activityContext;
+	Context mActivityContext;
 	
 	SharedPrefsManager mPrefsManager;
-	ParseManager parse;
+	ParseManager mParse;
 
-	String[] wordArray;
-	String[] definitionArray;
+	Set<Integer> mWordSet = new HashSet<Integer>();
+	Set<Integer> mDefinitionSet;
+	List<String> mDefinitionChoices;
 
-	Set<Integer> wordSet = new HashSet<Integer>();
-	Set<Integer> definitionSet;
-	List<String> definitionChoices;
-
-	String radioButtonZero;
-	String radioButtonOne;
-	String radioButtonTwo;
-	String radioButtonThree;
+	String mRadioButtonZero;
+	String mRadioButtonOne;
+	String mRadioButtonTwo;
+	String mRadioButtonThree;
 	
-	boolean questionAnswered;
+	boolean mQuestionAnswered;
 	
-	int currentPlaceInWordList = 0;
+	int mCurrentPlaceInWordList = 0;
 
-	int currentWordInt = 0;
-	int correctRadioButton;
+	int mCurrentWordInt = 0;
+	int mCorrectRadioButton;
 
 	public QuizBehavior(Context context, int quizSize) {
-		activityContext = context;
-		newQuiz = new QuizObject(quizSize, activityContext.getResources()
-				.getStringArray(R.array.word_array), activityContext
+		mActivityContext = context;
+		newQuiz = new QuizObject(quizSize, mActivityContext.getResources()
+				.getStringArray(R.array.word_array), mActivityContext
 				.getResources().getStringArray(R.array.definition_array));
 		
-		mPrefsManager = new SharedPrefsManager(activityContext);
-		parse = new ParseManager(retrieveUserName(), context);
+		mPrefsManager = new SharedPrefsManager(mActivityContext);
+		mParse = new ParseManager(retrieveUserName(), context);
 		
 		
 		/*
@@ -69,7 +66,7 @@ public class QuizBehavior {
 		chooseCurrentWord();
 		chooseCorrectRadio();
 		setRandomDefinitions();
-		setRandomCorrectDefinition(currentWordInt, correctRadioButton);
+		setRandomCorrectDefinition(mCurrentWordInt, mCorrectRadioButton);
 
 	}
 
@@ -82,9 +79,9 @@ public class QuizBehavior {
 		while (needNewWord) {
 			int curWord = randomCurrentWord.nextInt(newQuiz.getWords().length);
 
-			if (!wordSet.contains(curWord)) {
-				wordSet.add(curWord);
-				currentWordInt = curWord;
+			if (!mWordSet.contains(curWord)) {
+				mWordSet.add(curWord);
+				mCurrentWordInt = curWord;
 				needNewWord = false;
 			}
 		}
@@ -92,7 +89,7 @@ public class QuizBehavior {
 
 	public void chooseCorrectRadio() {
 		Random randomCurrentDefinitionRadio = new Random();
-		correctRadioButton = randomCurrentDefinitionRadio.nextInt(4);
+		mCorrectRadioButton = randomCurrentDefinitionRadio.nextInt(4);
 	}
 
 	public void setRandomCorrectDefinition(int currentWordInteger,
@@ -100,16 +97,16 @@ public class QuizBehavior {
 		switch (correctRadio) {
 
 		case 0:
-			radioButtonZero = newQuiz.getDefinitions()[currentWordInteger];
+			mRadioButtonZero = newQuiz.getDefinitions()[currentWordInteger];
 			break;
 		case 1:
-			radioButtonOne = newQuiz.getDefinitions()[currentWordInteger];
+			mRadioButtonOne = newQuiz.getDefinitions()[currentWordInteger];
 			break;
 		case 2:
-			radioButtonTwo = newQuiz.getDefinitions()[currentWordInteger];
+			mRadioButtonTwo = newQuiz.getDefinitions()[currentWordInteger];
 			break;
 		case 3:
-			radioButtonThree = newQuiz.getDefinitions()[currentWordInteger];
+			mRadioButtonThree = newQuiz.getDefinitions()[currentWordInteger];
 			break;
 		default:
 			break;
@@ -119,38 +116,38 @@ public class QuizBehavior {
 
 	public void setRandomDefinitions() {
 		Random randDefinition = new Random();
-		definitionSet = new HashSet<Integer>();
-		definitionChoices = new ArrayList<String>();
+		mDefinitionSet = new HashSet<Integer>();
+		mDefinitionChoices = new ArrayList<String>();
 
 		// Load definition set with unique integers with which to access
 		// definition array
-		while (definitionSet.size() < 5) {
+		while (mDefinitionSet.size() < 5) {
 			int defInt = randDefinition
 					.nextInt(newQuiz.getDefinitions().length);
 
-			if (defInt != currentWordInt) {
-				definitionSet.add(defInt);
+			if (defInt != mCurrentWordInt) {
+				mDefinitionSet.add(defInt);
 			}
 		}
 
-		for (int i : definitionSet) {
-			definitionChoices.add(newQuiz.getDefinitions()[i]);
+		for (int i : mDefinitionSet) {
+			mDefinitionChoices.add(newQuiz.getDefinitions()[i]);
 		}
 
-		for (int i = 0; i < definitionChoices.size(); i++) {
+		for (int i = 0; i < mDefinitionChoices.size(); i++) {
 			switch (i) {
 
 			case 0:
-				radioButtonZero = definitionChoices.get(i);
+				mRadioButtonZero = mDefinitionChoices.get(i);
 				break;
 			case 1:
-				radioButtonOne = definitionChoices.get(i);
+				mRadioButtonOne = mDefinitionChoices.get(i);
 				break;
 			case 2:
-				radioButtonTwo = definitionChoices.get(i);
+				mRadioButtonTwo = mDefinitionChoices.get(i);
 				break;
 			case 3:
-				radioButtonThree = definitionChoices.get(i);
+				mRadioButtonThree = mDefinitionChoices.get(i);
 				break;
 			default:
 				break;
@@ -167,35 +164,35 @@ public class QuizBehavior {
 	}
 	
 	public void incrementCurrentPlaceInWordList() {
-		currentPlaceInWordList++;
+		mCurrentPlaceInWordList++;
 	}
 	
 	public int getCurrentPlaceInWordList() {
-		return currentPlaceInWordList;
+		return mCurrentPlaceInWordList;
 	}
 
 	public String getCurrentWord() {
-		return newQuiz.getWords()[currentWordInt];
+		return newQuiz.getWords()[mCurrentWordInt];
 	}
 
 	public int getCorrectRadioButton() {
-		return correctRadioButton;
+		return mCorrectRadioButton;
 	}
 
 	public String getRadioZero() {
-		return radioButtonZero;
+		return mRadioButtonZero;
 	}
 
 	public String getRadioOne() {
-		return radioButtonOne;
+		return mRadioButtonOne;
 	}
 
 	public String getRadioTwo() {
-		return radioButtonTwo;
+		return mRadioButtonTwo;
 	}
 
 	public String getRadioThree() {
-		return radioButtonThree;
+		return mRadioButtonThree;
 	}
 	
 	public int getQuizSize() {
@@ -227,11 +224,11 @@ public class QuizBehavior {
 	}
 	
 	public void setQuestionAnswered(boolean response) {
-		questionAnswered = response;
+		mQuestionAnswered = response;
 	}
 	
 	public boolean getQuestionAnswered() {
-		return questionAnswered;
+		return mQuestionAnswered;
 	}
 	
 	public String[] getWordList() {
@@ -253,11 +250,11 @@ public class QuizBehavior {
 	}
 	
 	public void saveQuizToParse() {
-		parse.saveQuiz(newQuiz);
+		mParse.saveQuiz(newQuiz);
 	}
 	
 	public void saveQuestionsMetaData() {
-		parse.saveQuestionsData(newQuiz.getQuizSize(), newQuiz.getCorrectResponses(), newQuiz.getIncorrectResponses(), newQuiz.getSkippedWords());
+		mParse.saveQuestionsData(newQuiz.getQuizSize(), newQuiz.getCorrectResponses(), newQuiz.getIncorrectResponses(), newQuiz.getSkippedWords());
 	}
 
 	public String retrieveUserName() {

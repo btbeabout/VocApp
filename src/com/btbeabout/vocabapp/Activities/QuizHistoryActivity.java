@@ -28,9 +28,9 @@ public class QuizHistoryActivity extends Activity {
 
 	QuizHistoryParseArrayAdapter mAdapter;
 	SharedPrefsManager mPrefsManager;
-	ParseManager parse;
-	ProgressIndicator downloadProgress;
-	ConnectionChecker conCheck;
+	ParseManager mParse;
+	ProgressIndicator mDownloadProgress;
+	ConnectionChecker mConCheck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class QuizHistoryActivity extends Activity {
 		setContentView(R.layout.quiz_history_layout);
 		
 		mPrefsManager = new SharedPrefsManager(this);
-		parse = new ParseManager(retrieveUserName(), this);
+		mParse = new ParseManager(retrieveUserName(), this);
 		
 		quizListView = (ListView) findViewById(R.id.quizHistoryList);
 		mAdapter = new QuizHistoryParseArrayAdapter(this, new ArrayList<QuizObject>());
@@ -57,8 +57,8 @@ public class QuizHistoryActivity extends Activity {
 	
 	
    public void updateData() {
-		downloadProgress = new ProgressIndicator(this);
-		downloadProgress.showProgressRing();
+		mDownloadProgress = new ProgressIndicator(this);
+		mDownloadProgress.showProgressRing();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("savedQuiz");
 		query.orderByDescending("updatedAt");
 		query.whereEqualTo("playerName", retrieveUserName());
@@ -78,7 +78,7 @@ public class QuizHistoryActivity extends Activity {
 						System.out.println("Quiz size: "
 								+ newDemObj.getQuizSize());
 					}
-					downloadProgress.cancelProgressRing();
+					mDownloadProgress.cancelProgressRing();
 
 				} else {
 					System.out.println("Whoops! Exception in Quiz History Updating!");
@@ -90,8 +90,8 @@ public class QuizHistoryActivity extends Activity {
 	}
    
 	public void updateList() {
-		conCheck = new ConnectionChecker(this);
-		if (conCheck.isConnected()) {
+		mConCheck = new ConnectionChecker(this);
+		if (mConCheck.isConnected()) {
 			quizListView.setAdapter(mAdapter);
 			updateData();
 		} else {

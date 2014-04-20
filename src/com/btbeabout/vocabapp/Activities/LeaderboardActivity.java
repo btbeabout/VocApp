@@ -32,12 +32,12 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 
 	LeaderboardParseArrayAdapter mAdapter;
 	SharedPrefsManager mPrefsManager;
-	Button criteriaMenuOpener;
-	PopupMenu popup;
-	ListView leaderboardListView;
-	ParseManager parse;
-	ProgressIndicator downloadProgress;
-	ConnectionChecker conCheck;
+	Button mCriteriaMenuOpener;
+	PopupMenu mPopup;
+	ListView mLeaderboardListView;
+	ParseManager mParse;
+	ProgressIndicator mDownloadProgress;
+	ConnectionChecker mConCheck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 		setContentView(R.layout.leaderboard_layout);
 
 		mPrefsManager = new SharedPrefsManager(this);
-		parse = new ParseManager(retrieveUserName(), this);
+		mParse = new ParseManager(retrieveUserName(), this);
 
-		leaderboardListView = (ListView) findViewById(R.id.leaderboardListView);
+		mLeaderboardListView = (ListView) findViewById(R.id.leaderboardListView);
 
 		/*
 		 *  Creates menu which allows user to sort leaderboard by various criteria, detailed below:
@@ -57,12 +57,12 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 		 *  If no connection is available, prompts user with a toast to try again later when a connection is established.
 		 */
 		
-		criteriaMenuOpener = (Button) findViewById(R.id.button3);
-		criteriaMenuOpener.setOnClickListener(this);
-		popup = new PopupMenu(this, criteriaMenuOpener);
-		MenuInflater inflater1 = popup.getMenuInflater();
-		inflater1.inflate(R.menu.sorting_menu, popup.getMenu());
-		popup.setOnMenuItemClickListener(this);
+		mCriteriaMenuOpener = (Button) findViewById(R.id.button3);
+		mCriteriaMenuOpener.setOnClickListener(this);
+		mPopup = new PopupMenu(this, mCriteriaMenuOpener);
+		MenuInflater mInflater1 = mPopup.getMenuInflater();
+		mInflater1.inflate(R.menu.sorting_menu, mPopup.getMenu());
+		mPopup.setOnMenuItemClickListener(this);
 
 		
 		updateList("totalCorrectAnswersAmount");
@@ -71,14 +71,14 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 	public void setAdapter(String questionDataQuery) {
 		mAdapter = new LeaderboardParseArrayAdapter(this,
 				new ArrayList<ParseObject>(), questionDataQuery);
-		leaderboardListView.setAdapter(mAdapter);
+		mLeaderboardListView.setAdapter(mAdapter);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button3:
-			popup.show();
+			mPopup.show();
 		}
 	}
 
@@ -87,19 +87,19 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 		switch (item.getItemId()) {
 		case R.id.criteriaSortCorrectAnswers:
 			updateList("totalCorrectAnswersAmount");
-			criteriaMenuOpener.setText("Sort By: Correct Answers");
+			mCriteriaMenuOpener.setText("Sort By: Correct Answers");
 			return true;
 		case R.id.criteriaSortInorrectAnswers:
 			updateList("totalIncorrectAnswersAmount");
-			criteriaMenuOpener.setText("Sort By: Incorrect Answers");
+			mCriteriaMenuOpener.setText("Sort By: Incorrect Answers");
 			return true;
 		case R.id.criteriaSortSkippedQuestions:
 			updateList("totalSkippedQuestionsAmount");
-			criteriaMenuOpener.setText("Sort By: Skipped Questions");
+			mCriteriaMenuOpener.setText("Sort By: Skipped Questions");
 			return true;
 		case R.id.criteriaSortTotalQuestions:
 			updateList("totalQuestionsAmount");
-			criteriaMenuOpener.setText("Sort By: Total Questions");
+			mCriteriaMenuOpener.setText("Sort By: Total Questions");
 			return true;
 		default:
 			return false;
@@ -107,8 +107,8 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 	}
 
 	public void updateData(String questionDataQuery) {
-		downloadProgress = new ProgressIndicator(this);
-		downloadProgress.showProgressRing();
+		mDownloadProgress = new ProgressIndicator(this);
+		mDownloadProgress.showProgressRing();
 		ParseQuery<ParseObject> query = ParseQuery
 				.getQuery("QuestionsMetaData");
 		query.setLimit(5);
@@ -120,7 +120,7 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 					for (ParseObject obj : objects) {
 						mAdapter.add(obj);
 					}
-					downloadProgress.cancelProgressRing();
+					mDownloadProgress.cancelProgressRing();
 
 				} else {
 					System.out
@@ -132,8 +132,8 @@ public class LeaderboardActivity extends Activity implements OnClickListener,
 	}
 
 	public void updateList(String criteria) {
-		conCheck = new ConnectionChecker(this);
-		if (conCheck.isConnected()) {
+		mConCheck = new ConnectionChecker(this);
+		if (mConCheck.isConnected()) {
 			setAdapter(criteria);
 			updateData(criteria);
 		} else {

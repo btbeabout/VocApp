@@ -18,19 +18,19 @@ public class QuizResultsActivity extends Activity {
 	TextView tvSkippedAnswers;
 	TextView tvQuizDate;
 	
-	ListView results_word_list;
+	ListView resultsWordList;
 	
-	ArrayAdapter<String> word_list_adapter;
+	ArrayAdapter<String> mWordListAdapter;
 
-	int correctAnswers;
-	int incorrectAnswers;
-	int skippedAnswers;
+	int mCorrectAnswers;
+	int mIncorrectAnswers;
+	int mSkippedAnswers;
 	
-	String[] words;
-	String[] definitions;
-	String[] combinedList;
+	String[] mWords;
+	String[] mDefinitions;
+	String[] mCombinedList;
 	
-	String currentDate;
+	String mCurrentDate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +51,11 @@ public class QuizResultsActivity extends Activity {
 
 	public void receiveIntent() {
 		Intent intent = getIntent();
-		correctAnswers = intent.getIntExtra("correctAnswers", 0);
-		incorrectAnswers = intent.getIntExtra("incorrectAnswers", 0);
-		skippedAnswers = intent.getIntExtra("skippedAnswers", 0);
-		words = intent.getStringArrayExtra("wordList");
-		definitions = intent.getStringArrayExtra("definitionList");
+		mCorrectAnswers = intent.getIntExtra("correctAnswers", 0);
+		mIncorrectAnswers = intent.getIntExtra("incorrectAnswers", 0);
+		mSkippedAnswers = intent.getIntExtra("skippedAnswers", 0);
+		mWords = intent.getStringArrayExtra("wordList");
+		mDefinitions = intent.getStringArrayExtra("definitionList");
 		
 	}
 	
@@ -63,7 +63,7 @@ public class QuizResultsActivity extends Activity {
 		
 		Time now = new Time(Time.getCurrentTimezone());
 		now.setToNow();
-		currentDate = now.month + 1 + "/" + now.monthDay + "/" + now.year;
+		mCurrentDate = now.month + 1 + "/" + now.monthDay + "/" + now.year;
 		
 	}
 
@@ -73,30 +73,30 @@ public class QuizResultsActivity extends Activity {
 		tvIncorrectAnswers = (TextView) findViewById(R.id.tvIncorrectAnswers);
 		tvSkippedAnswers = (TextView) findViewById(R.id.tvSkippedAnswers);
 		tvQuizDate = (TextView) findViewById(R.id.tvQuizDate);
-		results_word_list = (ListView) findViewById(R.id.results_word_list);
+		resultsWordList = (ListView) findViewById(R.id.results_word_list);
 	
 	}
 
 	public void applyValuesToViews() {
-		tvCorrectAnswers.setText(Integer.toString(correctAnswers));
-		tvIncorrectAnswers.setText(Integer.toString(incorrectAnswers));
-		tvSkippedAnswers.setText(Integer.toString(skippedAnswers));
-		tvQuizDate.setText(currentDate);
+		tvCorrectAnswers.setText(Integer.toString(mCorrectAnswers));
+		tvIncorrectAnswers.setText(Integer.toString(mIncorrectAnswers));
+		tvSkippedAnswers.setText(Integer.toString(mSkippedAnswers));
+		tvQuizDate.setText(mCurrentDate);
 		
 	}
 	
 	public void setupArrayAdapter() {
-		word_list_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, combineWordsAndDefinitions(words, definitions));
-		results_word_list.setAdapter(word_list_adapter);
+		mWordListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, combineWordsAndDefinitions(mWords, mDefinitions));
+		resultsWordList.setAdapter(mWordListAdapter);
 	}
 	
 	public String[] combineWordsAndDefinitions(String[] wordlist, String[] definitionlist) {
-		combinedList = new String[wordlist.length];
+		mCombinedList = new String[wordlist.length];
 		for (int i = 0; i < wordlist.length; i++) {
-			combinedList[i] = wordlist[i] + " = " + definitionlist[i];
+			mCombinedList[i] = wordlist[i] + " = " + definitionlist[i];
 		}
 		
-		return combinedList;
+		return mCombinedList;
 	}
 
 	public void goToMainMenu(View v) {
